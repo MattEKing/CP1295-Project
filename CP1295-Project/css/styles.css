@@ -41,7 +41,7 @@ header {
     gap: 1rem;
 }
 
-#export-btn , #sortNew, #sortOld {
+#export-btn , #asc-btn, #desc-btn {
     background-color: white;
     color: var(--primary-color);
     border: none;
@@ -52,7 +52,7 @@ header {
     transition: all 0.2s ease;
 }
 
-#export-btn:hover, #sortNew:hover, #sortOld:hover {
+#export-btn:hover, #asc-btn:hover, #desc-btn:hover {
     background-color: #ecf0f1;
     transform: translateY(-2px);
 }
@@ -120,6 +120,13 @@ header {
     font-size: 0.95rem;
     line-height: 1.4;
     overflow-wrap: break-word;
+}
+
+.note-footer {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 10px;
+    color: #6d6c6c;
 }
 
 /* Note colors */

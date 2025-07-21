@@ -18,14 +18,16 @@ export class Note {
      * @param {number} options.x - X position on the board
      * @param {number} options.y - Y position on the board
      * @param {string} options.color - CSS class for note color
+     * @param {string} options.timeStamp - TimeStamp for for when the note was created
      */
-    constructor({ id = null, content = '', x = 0, y = 0, color = null }) {
+    constructor({ id = null, content = '', x = 0, y = 0, color = null ,timeStamp = new Date().toString().slice(4, 25)}) {
         this.id = id || this.generateId();
         this.content = content;
         this.x = x;
         this.y = y;
         this.color = color || this.getRandomColor();
         this.element = null;
+        this.timeStamp = timeStamp;
     }
 
     /**
@@ -63,6 +65,10 @@ export class Note {
         const contentElement = noteElement.querySelector('.note-content');
         contentElement.textContent = this.content;
         
+        //set timeStamp
+        const timeStampElement = noteElement.querySelector('.note-footer');
+        timeStampElement.textContent = this.timeStamp;
+
         // Store reference to the element
         this.element = noteElement;
         return noteElement;
@@ -106,7 +112,8 @@ export class Note {
             content: this.content,
             x: this.x,
             y: this.y,
-            color: this.color
+            color: this.color,
+            timeStamp:this.timeStamp
         };
     }
 

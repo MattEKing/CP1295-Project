@@ -11,9 +11,9 @@
     <header>
         <h1>QuickNotes</h1>
         <div class="controls">
-            <span>Sort Notes:</span>
-            <button id="sortNew" title="Sort Newest">Newest</button>
-            <button id="sortOld" title="Sort Oldest">Oldest</button>
+            <span class="instructions">Sort Notes:</span>
+            <button id="asc-btn" title="Sort Newest">Newest</button>
+            <button id="desc-btn" title="Sort Oldest">Oldest</button>
             <span>|</span>
             <button id="export-btn" title="Export notes as JSON">Export</button>
             <span class="instructions">Double-click anywhere to add a note</span>
@@ -33,6 +33,7 @@
                 <button class="delete-btn" title="Delete note">🗑️</button>
             </div>
             <div class="note-content" contenteditable="true"></div>
+            <div class="note-footer" contenteditable="true"></div>
         </div>
     </template>
 
