@@ -127,6 +127,14 @@ export function setupNoteEventListeners(noteElement, note, noteManager) {
             console.error('Failed to fetch quote:', error);
         }
     });
+
+    //Image button Handler
+    imageButton.addEventListener('click', () => {
+        const browser = document.getElementById('fileExp');
+        browser.click();
+        note.updateImage(browser.value)
+        console.log(noteManager.getAllNotes());
+    });
     
     // Drag start
     noteElement.addEventListener('mousedown', (event) => {
