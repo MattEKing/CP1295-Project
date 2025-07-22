@@ -3,7 +3,7 @@
  * Functions for handling the user interface elements and interactions
  */
 
-import { createNote } from './notes.js';
+import { createNote, NoteManager } from './notes.js';
 import { saveNotes, exportNotesAsJson } from './storage.js';
 
 /**
@@ -31,14 +31,12 @@ export function initializeUI(noteManager) {
 
     //Sorting Ascending button click handler
     ascBtn.addEventListener('click', () => {
-        console.log("Asc");
-        sortAsc();
+        sortAsc(noteManager);
     })
 
     //Sorting Descending button click handler
     descBtn.addEventListener('click', () => {
-        console.log("Desc");
-        sortDesc()
+        sortDesc(noteManager)
     })
 
     // Setup auto-save timer
@@ -247,38 +245,46 @@ export function renderAllNotes(noteManager) {
 
 /**
  * Sorts the notes by TimeStamp in ascending order.
+ * @param {NoteManager} noteManager -- The note manager instance
  */
-export function sortAsc() {
+export function sortAsc(noteManager) {
+    const Notes = noteManager.getAllNotes()
+    Notes.sort((a, b) => new Date(a.timeStamp) - new Date(b.timeStamp))
+    arrangeNotes(Notes);
+}
+
+/**
+ * Sorts the notes by TimeStamp in descending order.
+ * @param {NoteManager} noteManager -- The note manager instance
+ */
+export function sortDesc(noteManager) {
+    const Notes = noteManager.getAllNotes()
+    Notes.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
+    arrangeNotes(Notes);
+}
+
+/**
+ * 
+ * @param {Array} notes -- array of note objects
+ */
+export function arrangeNotes(notes) {
     const noteBoard = document.getElementById('note-board');
-    const existingNotes = noteBoard.querySelectorAll('.note');
     const boardRect = noteBoard.getBoundingClientRect();
     let x = 10;
     let y = 10;
     let row = 0;
     
-    existingNotes.forEach(noteElement => {
-        const noteWidth = noteElement.offsetWidth;
-        const noteHeight = noteElement.offsetHeight;
+    notes.forEach(note => {
+        const noteWidth = note.element.offsetWidth;
+        const noteHeight = note.element.offsetHeight;
 
         if (x + noteWidth > boardRect.width) {
             x = 10;
             y += row + 10;
         }
 
-        console.log(noteElement)
-        noteElement.style.left = `${x}px`;
-        noteElement.style.top = `${y}px`
-
-         x += noteWidth + 10;
-         row = Math.max(row, noteHeight);
+        note.updatePosition(x, y);
+        x += noteWidth + 10;
+        row = Math.max(row, noteHeight);
     })
-
-}
-
-/**
- * Sorts the notes by TimeStamp in descending order.
- */
-export function sortDesc(noteManager) {
-    const noteBoard = document.getElementById('note-board');
-    const existingNotes = noteBoard.querySelectorAll('.note');
 }
