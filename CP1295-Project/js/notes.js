@@ -20,14 +20,14 @@ export class Note {
      * @param {string} options.color - CSS class for note color
      * @param {string} options.timeStamp - TimeStamp for for when the note was created
      */
-    constructor({ id = null, content = '', x = 0, y = 0, color = null,image = '' ,timeStamp = new Date().toString().slice(4, 25)}) {
+    constructor({ id = null, content = '', x = 0, y = 0, color = null,image = new Image() ,timeStamp = new Date().toString().slice(4, 25)}) {
         this.id = id || this.generateId();
         this.content = content;
         this.x = x;
         this.y = y;
         this.color = color || this.getRandomColor();
         this.element = null;
-        this.image = this.image;
+        this.image = image;
         this.timeStamp = timeStamp;
     }
 
@@ -107,10 +107,12 @@ export class Note {
      * @param {Image} image 
      */
     updateImage(image) {
-        const noteImg = new Image(image)
         this.image = image;
         const contentElement = this.element.querySelector('.note-content');
-        contentElement.textContent = this.image;
+        const imageElement = document.createElement("img");
+        imageElement.src = this.image; 
+        imageElement.alt = "image"
+        contentElement.append(imageElement);
     }
 
     /**
