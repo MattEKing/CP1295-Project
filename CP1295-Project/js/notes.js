@@ -18,17 +18,20 @@ export class Note {
      * @param {number} options.x - X position on the board
      * @param {number} options.y - Y position on the board
      * @param {string} options.color - CSS class for note color
+     * @param {string} option.image - Image src for a add image
      * @param {string} options.timeStamp - TimeStamp for for when the note was created
      */
-    constructor({ id = null, content = '', x = 0, y = 0, color = null,image = new Image() ,timeStamp = new Date().toString().slice(4, 25)}) {
+    constructor({ id = null, content = '', x = 0, y = 0, color = null,image = "" ,timeStamp = new Date().toString().slice(4, 25)}) {
         this.id = id || this.generateId();
         this.content = content;
         this.x = x;
         this.y = y;
         this.color = color || this.getRandomColor();
         this.element = null;
+        //-----------------------------------------------------------
         this.image = image;
         this.timeStamp = timeStamp;
+        //-----------------------------------------------------------
     }
 
     /**
@@ -65,11 +68,15 @@ export class Note {
         // Set content
         const contentElement = noteElement.querySelector('.note-content');
         contentElement.textContent = this.content;
-        
+        // ----------------------------------------------------------------------------------------------------------
         //set timeStamp
         const timeStampElement = noteElement.querySelector('.note-footer');
         timeStampElement.textContent = this.timeStamp;
 
+        //set image
+        const imageElement = noteElement.querySelector('.image');
+        imageElement.src = this.image;
+        //----------------------------------------------------------------------------------------------------------
         // Store reference to the element
         this.element = noteElement;
         return noteElement;
@@ -102,18 +109,17 @@ export class Note {
             contentElement.textContent = content;
         }
     }
+    // --------------------------------------------------------------------------------------
     /**
      * Updated an Image to the note's content
      * @param {Image} image 
      */
     updateImage(image) {
         this.image = image;
-        const contentElement = this.element.querySelector('.note-content');
-        const imageElement = document.createElement("img");
-        imageElement.src = this.image; 
-        imageElement.alt = "image"
-        contentElement.append(imageElement);
+        const imgElement =this.element.querySelector("img");
+        imgElement.src = this.image;
     }
+    //---------------------------------------------------------------------------------------
 
     /**
      * Convert note to plain object for storage
@@ -126,7 +132,10 @@ export class Note {
             x: this.x,
             y: this.y,
             color: this.color,
-            timeStamp:this.timeStamp
+            // ------------------------------------------------
+            timeStamp:this.timeStamp,
+            image:this.image
+            // -----------------------------------------------
         };
     }
 
@@ -137,7 +146,7 @@ export class Note {
     async addRandomQuote() {
         try {
             // Example of fetching from a quote API
-            const response = await fetch('https://api.quotable.io/random?tags=inspirational,success');
+            const response = await fetch('http://api.quotable.io/random?tags=inspirational,success');
             
             if (!response.ok) {
                 throw new Error('Failed to fetch quote');

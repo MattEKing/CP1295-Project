@@ -13,8 +13,10 @@ import { saveNotes, exportNotesAsJson } from './storage.js';
 export function initializeUI(noteManager) {
     const noteBoard = document.getElementById('note-board');
     const exportBtn = document.getElementById('export-btn');
+    //------------------------------------------------------------
     const ascBtn = document.getElementById('asc-btn');
     const descBtn = document.getElementById('desc-btn');
+    //------------------------------------------------------------
 
     // Double click on board to create a new note
     noteBoard.addEventListener('dblclick', (event) => {
@@ -93,8 +95,10 @@ export function setupNoteEventListeners(noteElement, note, noteManager) {
     // Get elements
     const contentElement = noteElement.querySelector('.note-content');
     const deleteButton = noteElement.querySelector('.delete-btn');
+    //----------------------------------------------------------------------------
     const quoteButton = noteElement.querySelector('.quote-btn');
     const imageButton = noteElement.querySelector('.img-btn')
+    //----------------------------------------------------------------------------
 
     // Track whether the note is being dragged
     let isDragging = false;
@@ -127,15 +131,32 @@ export function setupNoteEventListeners(noteElement, note, noteManager) {
             console.error('Failed to fetch quote:', error);
         }
     });
-
+    //--------------------------------------------------------------------------------------------
     //Image button Handler
-    imageButton.addEventListener('click', () => {
-        const browser = document.getElementById('fileExp');
-        browser.click();
-        note.updateImage(browser.value)
-        console.log(noteManager.getAllNotes());
-    });
+    const browser = noteElement.querySelector('.fileExp');
     
+
+    imageButton.addEventListener('click', () => {
+        browser.click();
+                        console.log(noteManager.getAllNotes())
+
+    });
+
+    browser.addEventListener('change', (event) => {
+        const img = event.target.files[0];
+        if (img) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const src = e.target.result;
+                note.updateImage(src)
+                console.log(noteManager.getAllNotes())
+            }
+         reader.readAsDataURL(img);
+            
+        }
+    })
+    //------------------------------------------------------------------------------------------------
+
     // Drag start
     noteElement.addEventListener('mousedown', (event) => {
         // Ignore if clicking on buttons or content area
@@ -251,6 +272,7 @@ export function renderAllNotes(noteManager) {
     });
 }
 
+//---------------------------------------------------------------------------------------------
 /**
  * Sorts the notes by TimeStamp in ascending order.
  * @param {NoteManager} noteManager -- The note manager instance
@@ -296,3 +318,4 @@ export function arrangeNotes(notes) {
         row = Math.max(row, noteHeight);
     })
 }
+//-------------------------------------------------------------------------------
